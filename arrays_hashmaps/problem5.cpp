@@ -1,29 +1,36 @@
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include <vector>
 using namespace std;
 
 class Solution {
 public:
   vector<int> topKFrequent(vector<int> &nums, int k) {
-    vector<int> z;
-    for (int i = 0; i < nums.size(); i++) {
-      z[i]++;
+    unordered_map<int, int> frequency;
+    for (int num : nums) {
+      frequency[num]++;
     }
-    cout << z.size();
-    map<int, int> x;
-    for (int i = 0; i < z.size(); i++) {
-      x[z[i]] = i;
+
+    map<int, vector<int>, greater<int>> sortedByFrequency;
+    for (auto &[num, freq] : frequency) {
+      sortedByFrequency[freq].push_back(num);
     }
-    for (int i = 0; i < x.size(); i++) {
-      cout << "first " << x[i] << " second: " << i << endl;
+
+    vector<int> topK;
+    for (auto &[freq, nums] : sortedByFrequency) {
+      for (int num : nums) {
+        if (k > 0) {
+          topK.push_back(num);
+          k--;
+        } else {
+          break;
+        }
+      }
+      if (k == 0)
+        break;
     }
-    return {};
+
+    return topK;
   }
 };
-
-int main() {
-  Solution x;
-  vector<int> a = {1, 1, 1, 2, 2, 3};
-  x.topKFrequent(a, 2);
-}
